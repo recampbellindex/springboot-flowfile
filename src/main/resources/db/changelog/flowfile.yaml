@@ -1,0 +1,19 @@
+stages:
+
+  Test:
+    actions:
+    - type: shell
+      command: echo "Running flow file...."
+
+  Mongo:
+    actions: 
+    - type: liquibase
+      command: status
+
+    - type: liquibase
+      command: update
+
+endStage:
+  actions:
+  - type: liquibase
+    command: history

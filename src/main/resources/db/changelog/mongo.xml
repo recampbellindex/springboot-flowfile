@@ -1,0 +1,96 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:mongodb-pro="http://www.liquibase.org/xml/ns/pro-mongodb"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/pro-mongodb http://www.liquibase.org/xml/ns/pro-mongodb/liquibase-pro-mongodb-latest.xsd">
+
+    <changeSet id="orders" author="adeel">
+        <mongodb-pro:mongo>
+            db = db.getSiblingDB( 'mydb' );
+            db.createCollection('orders');
+        </mongodb-pro:mongo>
+        <rollback>
+            <mongodb-pro:mongo>
+                db = db.getSiblingDB( 'mydb' );
+                db.orders.drop();
+                db.mydb.drop();
+            </mongodb-pro:mongo>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="customers" author="adeel">
+        <mongodb-pro:mongoFile path="nosql/scriptFile.js" relativeToChangelogFile="true"/>
+                <rollback>
+                    <mongodb-pro:mongoFile path="nosql/scriptFile-rollback.js" relativeToChangelogFile="true"/>
+                </rollback>
+    </changeSet>
+
+    <changeSet id="books" author="adeel">
+        <mongodb-pro:mongo>
+            db.createCollection('books');
+        </mongodb-pro:mongo>
+        <rollback>
+            <mongodb-pro:mongo>
+                db.books.drop();
+            </mongodb-pro:mongo>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="insert_MongoDB_Tutorial" author="adeel">
+        <mongodb-pro:mongo>
+            db.books.insertOne({ 
+                title: 'MongoDB Tutorial',
+                isbn: '0-8888-8888-8'
+            });
+        </mongodb-pro:mongo>
+        <rollback>
+            <mongodb-pro:mongo>
+                db.books.deleteOne({ 
+                title: 'MongoDB Tutorial',
+                isbn: '0-8888-8888-8'
+            });
+            </mongodb-pro:mongo>
+        </rollback>
+    </changeSet>
+
+
+    <changeSet id="car" author="adeel">
+        <mongodb-pro:mongo>
+            db.car.insertMany ([
+         { _id: 1, name: "Alto", color: "Red",cno: "H410",speed:40,mfdcountry: "India"},
+         { _id: 2, name: "Polo", color: "White",cno: "H411",speed:45,mfdcountry: "Japan" },
+         { _id: 3, name: "Audi", color: "Black",cno: "H412",speed:50,mfdcountry: "Germany" }
+         ]);
+        </mongodb-pro:mongo>
+        <rollback>
+            <mongodb-pro:mongo>
+                db.car.deleteMany( { } );
+                db.car.drop();
+            </mongodb-pro:mongo>
+        </rollback>
+    </changeSet>
+
+
+    <changeSet id="findAndModify_car" author="adeel">
+        <mongodb-pro:mongo>
+            db.car.findAndModify({
+                query: { name: "Alto" },
+                sort: { cno: 1 },
+                update: { $inc: { speed: 100 } },
+            })
+        </mongodb-pro:mongo>
+        <rollback>
+            <mongodb-pro:mongo>
+                db.car.findAndModify({
+                    query: { name: "Alto" },
+                    sort: { cno: 1 },
+                    update: { $inc: { speed: -100 } },
+                })
+            </mongodb-pro:mongo>
+        </rollback>
+    </changeSet>
+
+
+
+</databaseChangeLog>

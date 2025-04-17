@@ -1,0 +1,27 @@
+Start H2 database:
+* Setup LIQUIBASE_HOME env var before running ./start-h2
+
+
+Start MongoDB database:
+
+# Docker
+docker run --name mongodb -d -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=password mongodb/mongodb-community-server:6.0-ubi8
+docker stop mongodb && docker rm mongodb
+
+
+# Mac
+brew services start mongodb/brew/mongodb-community@7.0
+brew services stop mongodb-community@7.0
+
+mongosh
+
+use admin
+
+db.createUser(
+   {
+     user: "amalik",
+     pwd: "password",
+     roles: [ "dbOwner" ]
+   }
+)
+
