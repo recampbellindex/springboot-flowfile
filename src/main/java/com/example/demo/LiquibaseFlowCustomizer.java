@@ -48,7 +48,9 @@ public class LiquibaseFlowCustomizer<T extends Liquibase> implements Customizer<
         System.setProperty("liquibase.command.changelogFile", mongoChangelogFile);
 
         System.setProperty("liquibase.licenseKey", licenseKey);
+        System.setProperty("liquibase.command.flowFile", flowFile);
         System.setProperty("liquibase.reports.enabled", isReportsEnabled);
+
 
         try {
             // liquibase.listUnrunChangeSets(new Contexts(), new LabelExpression())

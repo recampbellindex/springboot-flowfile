@@ -5,7 +5,7 @@ stages:
     - type: shell
       command: echo "Running flow file...."
 
-  Mongo:
+  Update:
     actions: 
     - type: liquibase
       command: status
